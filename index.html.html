@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOOVX | Vitrine de Produtos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --laranja: #FF6100;
+    --laranja-suave: #FFF0E6;
+    --preto: #111111;
+    --cinza-escuro: #333333;
+    --cinza-medio: #888888;
+    --cinza-claro: #F5F5F5;
+    --branco: #FFFFFF;
+    --borda: #E8E8E8;
+    --sombra: 0 2px 16px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cinza-claro);
+    color: var(--preto);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--preto);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--laranja);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--branco);
+    letter-spacing: -1px;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--laranja); }
+
+  .search-bar {
+    flex: 1;
+    max-width: 460px;
+    position: relative;
+  }
+  .search-bar input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border-radius: 8px;
+    border: none;
+    background: #222;
+    color: var(--branco);
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: background 0.2s;
+  }
+  .search-bar input::placeholder { color: #666; }
+  .search-bar input:focus { background: #2a2a2a; }
+  .search-bar svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+
+  .tag-shopee {
+    background: var(--laranja);
+    color: var(--branco);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  /* HERO FAIXA */
+  .hero-bar {
+    background: var(--laranja-suave);
+    border-bottom: 1px solid #FFD4B5;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  .hero-bar p {
+    font-size: 0.85rem;
+    color: var(--laranja);
+    font-weight: 600;
+  }
+
+  /* FILTROS */
+  .filtros-wrap {
+    max-width: 1200px;
+    margin: 24px auto 0;
+    padding: 0 20px;
+  }
+  .filtros-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cinza-medio);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filtro-btn {
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--borda);
+    background: var(--branco);
+    font-size: 0.82rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--cinza-escuro);
+    transition: all 0.15s;
+  }
+  .filtro-btn:hover { border-color: var(--laranja); color: var(--laranja); }
+  .filtro-btn.ativo {
+    background: var(--laranja);
+    border-color: var(--laranja);
+    color: var(--branco);
+  }
+
+  /* RESULTADOS */
+  .resultados-info {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    font-size: 0.82rem;
+    color: var(--cinza-medio);
+  }
+
+  /* GRID */
+  .grid {
+    max-width: 1200px;
+    margin: 16px auto 40px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--branco);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.18s, box-shadow 0.18s;
+    border: 1px solid var(--borda);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+  }
+
+  .card-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #f9f9f9;
+    overflow: hidden;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  .card:hover .card-img-wrap img { transform: scale(1.04); }
+
+  .badge-comissao {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--laranja);
+    color: var(--branco);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+  }
+  .badge-vendas {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .card-body {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .card-categoria {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--laranja);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .card-nome {
+    font-size: 0.87rem;
+    font-weight: 500;
+    color: var(--cinza-escuro);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-loja {
+    font-size: 0.74rem;
+    color: var(--cinza-medio);
+  }
+
+  .card-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-preco {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--preto);
+  }
+
+  .btn-comprar {
+    display: inline-block;
+    background: var(--laranja);
+    color: var(--branco);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-comprar:hover { background: #E05500; transform: scale(1.03); }
+
+  /* VAZIO */
+  .vazio {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--cinza-medio);
+    display: none;
+    grid-column: 1 / -1;
+  }
+  .vazio svg { margin-bottom: 12px; opacity: 0.4; }
+  .vazio p { font-size: 0.95rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--preto);
+    color: #555;
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+  footer a { color: var(--laranja); text-decoration: none; }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .header-inner { gap: 10px; }
+    .logo { font-size: 1.25rem; }
+    .tag-shopee { display: none; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .card-nome { font-size: 0.8rem; }
+    .card-preco { font-size: 0.95rem; }
+    .btn-comprar { font-size: 0.72rem; padding: 7px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">MOOV<span>X</span></div>
+    <div class="search-bar">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" id="busca" placeholder="Buscar produto..." oninput="filtrar()">
+    </div>
+    <div class="tag-shopee">🛒 Afiliado Shopee</div>
+  </div>
+</header>
+
+<div class="hero-bar">
+  <p>🔥 Melhores produtos selecionados com os melhores preços na Shopee</p>
+</div>
+
+<div class="filtros-wrap">
+  <div class="filtros-label">Categorias</div>
+  <div class="filtros" id="filtros"></div>
+</div>
+
+<div class="resultados-info" id="info-resultados"></div>
+
+<div class="grid" id="grid">
+  <div class="vazio" id="vazio">
+    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+    </svg>
+    <p>Nenhum produto encontrado. Tente outra busca.</p>
+  </div>
+</div>
+
+<footer>
+  <p>Links de afiliado Shopee &mdash; Ao comprar por estes links, você apoia este canal sem pagar nada a mais.</p>
+  <p style="margin-top:6px;">© 2024 MOOVX &mdash; Todos os direitos reservados</p>
+</footer>
+
+<script>
+const produtos = [
+  {
+    id: "23293854218",
+    nome: "Estante para Banheiro Pia Coluna, Gabinete Banheiro, Móvel para Banheiro, Envernizado",
+    preco: "R$ 79,30",
+    vendas: "117",
+    loja: "Bacana Decor",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/2g8hcxPVa0",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7rzjan5njuqc4_tn"
+  },
+  {
+    id: "23197997121",
+    nome: "Estante para Banheiro Pia Coluna, Gabinete Banheiro, Móvel para Banheiro, Acabamento Envernizado TOP",
+    preco: "R$ 199,90",
+    vendas: "845",
+    loja: "Loja do Tapete e Móvel Natural",
+    comissao: "13%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/2qS7pGOsF3",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1ykw7nh31e9c9_tn"
+  },
+  {
+    id: "23393842962",
+    nome: "Estante para Banheiro Pia Coluna, Gabinete Banheiro, Móvel para Banheiro, Envernizado",
+    preco: "R$ 134,90",
+    vendas: "67",
+    loja: "Elemento Decor",
+    comissao: "22%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/30lY1ZOEu6",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7rzjan5njuqc4_tn"
+  },
+  {
+    id: "19199550562",
+    nome: "Estante para Banheiro Pia Coluna, Gabinete Banheiro, Móvel para Banheiro, Envernizado",
+    preco: "R$ 149,90",
+    vendas: "8",
+    loja: "Loja do Tapete e Móvel Natural",
+    comissao: "13%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/3B4yDsNbZ9",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1ykw7nh5uj5e0_tn"
+  },
+  {
+    id: "23093406523",
+    nome: "Estante para Banheiro Pia Coluna, Gabinete Banheiro, Móvel para Banheiro, Envernizado",
+    preco: "R$ 134,90",
+    vendas: "104",
+    loja: "Meu Tapete",
+    comissao: "18%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/7KuXBX7k6y",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7rzjan5njuqc4_tn"
+  },
+  {
+    id: "23997362089",
+    nome: "Espelheira para Banheiro Madrid, Armário para banheiro com espelho",
+    preco: "R$ 160,90",
+    vendas: "59",
+    loja: "Espaço da Mobilia",
+    comissao: "13%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/7VDxNq76m1",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mbp58vtengwp1a_tn"
+  },
+  {
+    id: "23292870627",
+    nome: "Armário com espelho para banheiro, armario de banheiro pequeno, armário de banheiro simples",
+    preco: "R$ 160,90",
+    vendas: "49",
+    loja: "Espaço da Mobilia",
+    comissao: "13%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/7fXNa96TR4",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mbpcduyaruef41_tn"
+  },
+  {
+    id: "18898090095",
+    nome: "Móvel Pia Coluna Banheiro, Estante para Banheiro Pia Coluna, Gabinete, Acabamento PLUS",
+    preco: "R$ 108,25",
+    vendas: "1000+",
+    loja: "Bacana Decor",
+    comissao: "13%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/7pqnmS5q67",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7rzjan59i6a5a_tn"
+  },
+  {
+    id: "19839394148",
+    nome: "Banheiro Plus Gabinete Para Banheiro Pia De Coluna Com Porta E Rodinhas Cor Preto",
+    preco: "R$ 157,00",
+    vendas: "1000+",
+    loja: "Clique Moveis Online",
+    comissao: "7%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/6feqOJAHSu",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m0pw0yxptjz113_tn"
+  },
+  {
+    id: "22993843162",
+    nome: "Móvel Pia Coluna Banheiro, Estante para Banheiro Pia Coluna, Gabinete, Acabamento PLUS",
+    preco: "R$ 176,60",
+    vendas: "509",
+    loja: "Elemento Decor",
+    comissao: "13%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/6pyGac9e7x",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7jjdqc6j8he8e_tn"
+  },
+  {
+    id: "22198564419",
+    nome: "Balcão Móvel Gabinete Mdf Para Banheiro Com Tampo & Cuba 80cm - Gavetas Lado Direito",
+    preco: "R$ 597,55",
+    vendas: "158",
+    loja: "VOXA MÓVEIS",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/70Hgmv90n0",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-ma9ye3i766ra03_tn"
+  },
+  {
+    id: "23193411456",
+    nome: "Móvel Pia Coluna Banheiro, Estante para Banheiro Pia Coluna, Gabinete, Acabamento PLUS",
+    preco: "R$ 169,90",
+    vendas: "726",
+    loja: "Meu Tapete",
+    comissao: "18%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/7Ab6zE8NS3",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1319j7fgec3a6_tn"
+  },
+  {
+    id: "22694050579",
+    nome: "Balcão Móvel Gabinete Mdf Para Banheiro Sem Tampo & Sem Cuba 80cm - Gavetas Lado Direito",
+    preco: "R$ 417,05",
+    vendas: "80",
+    loja: "VOXA MÓVEIS",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/60P9b5Cooq",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-ma9svw2yx5rt06_tn"
+  },
+  {
+    id: "22997336641",
+    nome: "Móveis para banheiro Móveis Bechara Baden - CORES",
+    preco: "R$ 400,00",
+    vendas: "10",
+    loja: "E & A Moveis",
+    comissao: "7%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/6AiZnOCBTt",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lriwa0iiq7t9f7@resize_w450_nl.webp"
+  },
+  {
+    id: "20865957734",
+    nome: "Kit de puxadores concha com 6 unidades para móveis, cozinha, sala, quarto e banheiro",
+    preco: "R$ 48,35",
+    vendas: "495",
+    loja: "Telis Ferragens",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/6L1zzhBY8w",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lgp4imf1b33p9e@resize_w450_nl.webp"
+  },
+  {
+    id: "45361695438",
+    nome: "Torneira, bacia de banheiro e móvel sob a pia com misturador quente e frio",
+    preco: "R$ 357,00",
+    vendas: "0",
+    loja: "Value Choice",
+    comissao: "9%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/5L9SnrFMAm",
+    img: "https://down-br.img.susercontent.com/file/br-11134258-820m5-ml8a34rlu7t287"
+  },
+  {
+    id: "23994503488",
+    nome: "Móvel Gabinete 70cm para Banheiro 1 Porta 1 Gaveta sem cuba Veneza",
+    preco: "R$ 499,00",
+    vendas: "0",
+    loja: "Móvel Shop Decor",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/5VSt0AEipp",
+    img: "https://down-br.img.susercontent.com/file/sg-11134201-824gp-mfmw33mtcb2g1e@resize_w450_nl.webp"
+  },
+  {
+    id: "23098301219",
+    nome: "Banheiro Plus Gabinete Para Banheiro Pia De Coluna Com Porta E Rodinhas Cor Preto",
+    preco: "R$ 169,99",
+    vendas: "102",
+    loja: "Caldeira Moveis",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/5fmJCTE5Us",
+    img: "https://down-br.img.susercontent.com/file/sg-11134201-7rd60-m72hl8orp6qc97@resize_w450_nl.webp"
+  },
+  {
+    id: "22798542470",
+    nome: "Balcão Móvel Gabinete Mdf Para Banheiro Sem Tampo & Sem Cuba 80cm - Gavetas Lado Esquerdo",
+    preco: "R$ 417,05",
+    vendas: "73",
+    loja: "VOXA MÓVEIS",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/5q5jOmDS9v",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-ma9svw2z5lfa76_tn"
+  },
+  {
+    id: "22298957386",
+    nome: "Gabinete com gaveta e rodinhas. Gaveteiro para banheiro e quarto. Cabeceira cama.",
+    preco: "R$ 259,00",
+    vendas: "0",
+    loja: "Kalima Decor",
+    comissao: "3%",
+    nicho: "CASA & DECORAÇÃO",
+    categoria: "BANHEIRO",
+    link: "https://s.shopee.com.br/9zvIMQxahk",
+    img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7rzjan5njuqc4_tn"
+  }
+];
+
+let categoriaAtiva = "TODOS";
+
+// Gera filtros
+function gerarFiltros() {
+  const cats = ["TODOS", ...new Set(produtos.map(p => p.categoria))];
+  const cont = document.getElementById("filtros");
+  cats.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "filtro-btn" + (cat === "TODOS" ? " ativo" : "");
+    btn.textContent = cat === "TODOS" ? "Todos" : cat.charAt(0) + cat.slice(1).toLowerCase();
+    btn.onclick = () => {
+      document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("ativo"));
+      btn.classList.add("ativo");
+      categoriaAtiva = cat;
+      filtrar();
+    };
+    cont.appendChild(btn);
+  });
+}
+
+function filtrar() {
+  const busca = document.getElementById("busca").value.toLowerCase();
+  const filtrados = produtos.filter(p => {
+    const matchCat = categoriaAtiva === "TODOS" || p.categoria === categoriaAtiva;
+    const matchBusca = p.nome.toLowerCase().includes(busca) || p.loja.toLowerCase().includes(busca);
+    return matchCat && matchBusca;
+  });
+  renderCards(filtrados);
+}
+
+function renderCards(lista) {
+  const grid = document.getElementById("grid");
+  const vazio = document.getElementById("vazio");
+  const info = document.getElementById("info-resultados");
+
+  // remove cards antigos mas mantém o vazio
+  grid.querySelectorAll(".card").forEach(c => c.remove());
+
+  info.textContent = lista.length + (lista.length === 1 ? " produto encontrado" : " produtos encontrados");
+
+  if (lista.length === 0) {
+    vazio.style.display = "block";
+    return;
+  }
+  vazio.style.display = "none";
+
+  lista.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const vendaLabel = p.vendas === "1000+" ? "🔥 +1000 vendidos" : p.vendas > 100 ? `⭐ ${p.vendas} vendidos` : p.vendas > 0 ? `${p.vendas} vendidos` : "";
+
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <img src="${p.img}" alt="${p.nome}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f5f5f5/cccccc?text=Produto'">
+        <span class="badge-comissao">${p.comissao}</span>
+        ${vendaLabel ? `<span class="badge-vendas">${vendaLabel}</span>` : ""}
+      </div>
+      <div class="card-body">
+        <div class="card-categoria">${p.categoria}</div>
+        <div class="card-nome">${p.nome}</div>
+        <div class="card-loja">🏪 ${p.loja}</div>
+        <div class="card-footer">
+          <div class="card-preco">${p.preco}</div>
+          <a href="${p.link}" target="_blank" rel="noopener" class="btn-comprar">Ver oferta →</a>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+gerarFiltros();
+filtrar();
+</script>
+</body>
+</html>
